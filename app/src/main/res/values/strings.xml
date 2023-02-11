@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">与子同行</string>
+    <string name="tab1">主页</string>
+    <string name="tab2">课程</string>
+    <string name="tab3">问答</string>
+    <string name="tab4">我的</string>
+</resources>
