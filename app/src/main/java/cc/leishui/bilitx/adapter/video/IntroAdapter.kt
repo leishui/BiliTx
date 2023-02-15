@@ -1,7 +1,8 @@
-package cc.leishui.bilitx.adapter
+package cc.leishui.bilitx.adapter.video
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cc.leishui.bilitx.R
+import cc.leishui.bilitx.activity.NormalVideoActivity
 import cc.leishui.bilitx.bean.biliBean.BVideo
 import cc.leishui.bilitx.bean.biliBean.Detail
 import cc.leishui.bilitx.network.bili.BiliRepo
@@ -49,6 +51,7 @@ class IntroAdapter(private val mContext: Context) :
 
         val ivT: ImageView? = itemView.findViewById(R.id.iv_tj)
         val tvT: TextView? = itemView.findViewById(R.id.tv_t_tj)
+        val llT: LinearLayout? = itemView.findViewById(R.id.ll_tj)
         val tvUp: TextView? = itemView.findViewById(R.id.tv_up_tj)
         val tvViewTj: TextView? = itemView.findViewById(R.id.tv_view_tj)
         val tvDanmakuTj: TextView? = itemView.findViewById(R.id.tv_danmaku_tj)
@@ -109,6 +112,11 @@ class IntroAdapter(private val mContext: Context) :
         }
         val l = tjList?.get(position)
         if (l != null) {
+            holder.llT?.setOnClickListener {
+                mContext.startActivity(Intent(mContext,NormalVideoActivity::class.java).apply {
+                    this.putExtra("BVideo", l)
+                })
+            }
             Glide.with(holder.itemView).load(l.pic).placeholder(R.drawable.loading)
                 .error(R.drawable.loading).into(holder.ivT!!)
             holder.tvT?.text = l.title

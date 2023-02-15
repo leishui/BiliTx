@@ -2,6 +2,22 @@
 <resources>
 
 
+    <!-- 控制app背景色 format:颜色值、资源引用 -->
+    <attr name="app_bg" format="color|reference" />
+    <!-- 控制app前景色 format:颜色值、资源引用 -->
+    <attr name="app_fg" format="color|reference" />
+    <!-- 控制app浅前景色 format:颜色值、资源引用 -->
+    <attr name="app_fg_q" format="color|reference" />
+    <!-- 控制app字体颜色 format:颜色值、资源引用 -->
+    <attr name="app_text" format="color|reference" />
+    <!-- 控制app评论区uname字体颜色 format:颜色值、资源引用 -->
+    <attr name="t_comment_uname" format="color|reference" />
+    <!-- 控制app评论区udes字体颜色 format:颜色值、资源引用 -->
+    <attr name="t_comment_udes" format="color|reference" />
+    <!-- 控制app评论区content字体颜色 format:颜色值、资源引用 -->
+    <attr name="t_comment_content" format="color|reference" />
+    <!-- 控制app评论区link字体颜色 format:颜色值、资源引用 -->
+    <attr name="t_comment_link" format="color|reference" />
     <!-- CircleIndicator -->
     <declare-styleable name="CircleIndicator">
         <attr name="ci_width" format="dimension" />

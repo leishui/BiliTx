@@ -21,13 +21,10 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import cc.leishui.bilitx.R;
 
-/**
- * Created by shuyu on 2016/12/23.
- * CustomGSYVideoPlayer是试验中，建议使用的时候使用StandardGSYVideoPlayer
- */
 public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
     private boolean isLinkScroll = false;
+    private ImageView start;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -103,27 +100,16 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         this.listener = listener;
     }
 
-//    @Override
-//    protected void changeUiToPreparingShow() {
-//        if (listener != null)
-//            listener.show();
-//        super.changeUiToPreparingShow();
-//    }
-//
-//    @Override
-//    protected void hideAllWidget() {
-//        if (listener != null)
-//            listener.hide();
-//        super.hideAllWidget();
-//    }
-
     @Override
     protected void setViewShowState(View view, int visibility) {
         if (view == mBottomProgressBar && listener != null) {
-            if (visibility == VISIBLE)
+            if (visibility == VISIBLE) {
+                start.setVisibility(INVISIBLE);
                 listener.hide();
-            else
+            } else {
+                start.setVisibility(VISIBLE);
                 listener.show();
+            }
         }
         super.setViewShowState(view, visibility);
     }
@@ -153,11 +139,36 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
      * ==========================================================================
      */
 
+//    protected void startDismissControlViewTimer() {
+//        cancelDismissControlViewTimer();
+//        mPostDismiss = true;
+//        postDelayed(dismissControlTask, 7000);
+//
+//    }
+//    Runnable dismissControlTask = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (mCurrentState != CURRENT_STATE_NORMAL
+//                    && mCurrentState != CURRENT_STATE_ERROR
+//                    && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
+//                hideAllWidget();
+//                setViewShowState(mLockScreen, GONE);
+//                if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+//                    hideNavKey(mContext);
+//                }
+//                if (mPostDismiss) {
+//                    postDelayed(this, 7000);
+//                }
+//            }
+//        }
+//    };
     @SuppressLint("SetTextI18n")
     @Override
     protected void init(Context context) {
         super.init(context);
-
+        start = findViewById(R.id.my_start);
+        start.setOnClickListener(view -> clickStartIcon());
+        //setDismissControlTime(1000);
         post(new Runnable() {
             @Override
             public void run() {
@@ -180,7 +191,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
                     @Override
                     public void onLongPress(@NonNull MotionEvent e) {
-                        if (mCurrentState==CURRENT_STATE_PLAYING) {
+                        if (mCurrentState == CURRENT_STATE_PLAYING) {
                             setSpeed(2f);
                             showProgressDialog2();
                             isLongPressed = true;
@@ -192,38 +203,36 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         });
     }
 
-
     //这个必须配置最上面的构造才能生效
     @Override
     public int getLayoutId() {
         if (mIfCurrentIsFullscreen) {
             return R.layout.sample_video_land;
         }
-        return R.layout.sample_video_normal;
+        return R.layout.video_normal;
     }
 
+    /**
+     * =================================================自定义播放键================
+     */
     @Override
     protected void updateStartImage() {
-        if (mIfCurrentIsFullscreen) {
-            if (mStartButton instanceof ImageView) {
-                ImageView imageView = (ImageView) mStartButton;
-                if (mCurrentState == CURRENT_STATE_PLAYING) {
-                    imageView.setImageResource(R.drawable.video_click_pause_selector);
-                } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                    imageView.setImageResource(R.drawable.video_click_play_selector);
-                } else {
-                    imageView.setImageResource(R.drawable.video_click_play_selector);
-                }
-            }
+        if (mCurrentState == CURRENT_STATE_PLAYING) {
+            start.setImageResource(R.drawable.pause);
+        } else if (mCurrentState == CURRENT_STATE_ERROR) {
+            start.setImageResource(R.drawable.play);
         } else {
-            super.updateStartImage();
+            start.setImageResource(R.drawable.play);
         }
     }
 
-//    @Override
-//    public int getEnlargeImageRes() {
-//        return R.drawable.custom_enlarge;
-//    }
+    /**
+     * ========================================================================
+     */
+    @Override
+    public int getEnlargeImageRes() {
+        return R.drawable.full_screen;
+    }
 //
 //    @Override
 //    public int getShrinkImageRes() {

@@ -12,12 +12,37 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="DarkTheme" parent="XUITheme.Phone">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black_bg</item>
+        <item name="colorPrimaryDark">@color/black_bg</item>
+        <item name="colorAccent">@color/black_bg</item>
+        <item name="app_bg">@color/black_bg</item>
+        <item name="app_fg">@color/black_fg</item>
+        <item name="app_text">@color/white</item>
+        <item name="app_fg_q">@color/black_fg_q</item>
+
+        <item name="t_comment_content">@color/white</item>
+        <item name="t_comment_link">@color/blue_link</item>
+        <item name="t_comment_udes">@color/gray72</item>
+        <item name="t_comment_uname">@color/gray92</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="XUITheme.Phone">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
+        <item name="app_bg">@color/white</item>
+        <item name="app_fg">@color/white</item>
+        <item name="app_text">@color/black</item>
+        <item name="app_fg_q">@color/black_80</item>
+
+        <item name="t_comment_content">@color/white</item>
+        <item name="t_comment_link">@color/blue_link</item>
+        <item name="t_comment_udes">@color/gray72</item>
+        <item name="t_comment_uname">@color/gray92</item>
     </style>
     <style name="VideoTheme" parent="XUITheme.Phone">
         <!-- Customize your theme here. -->

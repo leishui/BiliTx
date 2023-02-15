@@ -7,11 +7,75 @@
     android:orientation="vertical"
     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tl_video_scroll"
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        >
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_video_scroll"
+            android:layout_marginEnd="180dp"
+            android:layout_width="match_parent"
+            app:tabTextColor="?attr/app_text"
+            app:tabIndicatorColor="@color/pink"
+            app:tabSelectedTextColor="@color/pink"
+            app:tabIndicatorFullWidth="false"
+            android:layout_height="40dp"/>
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="25dp"
+            android:layout_width="140dp"
+            android:gravity="center"
+            android:layout_height="35dp">
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                tools:ignore="Suspicious0dp">
 
+                <!-- 添加需要展开的子视图 -->
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_bt_danmaku"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="?attr/app_text"
+                    android:text="点我发弹幕" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_danmaku"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:background="@drawable/bg_danmaku_open"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/cb_danmaku"
+                android:button="@null"
+                android:background="@drawable/bt_danmaku"
+                android:layout_width="22dp"
+                android:layout_height="22dp"/>
+        </FrameLayout>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/app_fg_q"/>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_video_scroll"
         android:layout_width="match_parent"

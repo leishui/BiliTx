@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.leishui.bilitx.R
-import cc.leishui.bilitx.adapter.IntroAdapter
-import cc.leishui.bilitx.bean.biliBean.Rcmd.DataEntity.ItemEntity
+import cc.leishui.bilitx.adapter.video.IntroAdapter
+import cc.leishui.bilitx.bean.biliBean.BVideo
 import cc.leishui.bilitx.network.bili.BiliRepo
 
-class IntroFragment(private val video: ItemEntity) : Fragment() {
+class IntroFragment(private val video: BVideo) : Fragment() {
 
 
     @SuppressLint("NotifyDataSetChanged", "CutPasteId")

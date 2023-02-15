@@ -1,22 +1,30 @@
 package cc.leishui.bilitx.activity
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.CheckBox
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.ViewPager
 import cc.leishui.bilitx.R
-import cc.leishui.bilitx.adapter.VideoPageAdapter
-import cc.leishui.bilitx.bean.biliBean.Rcmd.DataEntity.ItemEntity
+import cc.leishui.bilitx.adapter.video.VideoPageAdapter
+import cc.leishui.bilitx.bean.biliBean.BVideo
 import cc.leishui.bilitx.constant.ResourceType
 import cc.leishui.bilitx.constant.StatusType
-import cc.leishui.bilitx.fragment.video.CommentFragmentVLayout
+import cc.leishui.bilitx.fragment.video.CommentFragment
 import cc.leishui.bilitx.fragment.video.IntroFragment
 import cc.leishui.bilitx.network.Repo
 import cc.leishui.bilitx.network.bili.BiliRepo
@@ -29,19 +37,20 @@ import cc.leishui.bilitx.view.LandLayoutVideo.ShowOrHideListener
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
-import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
-import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 class NormalVideoActivity : AppCompatActivity() {
+    private var width = 0
+    private var animator: ValueAnimator? = null
+    private var container: LinearLayout? = null
+    private var content: LinearLayout? = null
     private var review: View? = null
     private lateinit var adapter: VideoPageAdapter
     private var isPlay = false
@@ -50,15 +59,16 @@ class NormalVideoActivity : AppCompatActivity() {
     private var orientationUtils: OrientationUtils? = null
     private var detailPlayer: LandLayoutVideo? = null
     private var appBar: AppBarLayout? = null
-    private var fab: FloatingActionButton? = null
     private var root: CoordinatorLayout? = null
     private var tl: TabLayout? = null
     private var tb: Toolbar? = null
     private var vp: ViewPager? = null
+    private var ivBack: ImageView? = null
+    private var ivHome: ImageView? = null
     private var toolBarLayout: CollapsingToolbarLayout? = null
     private var curState: AppBarStateChangeListener.State? = null
-    private lateinit var lesson: ItemEntity
-    private lateinit var commentFragmentVLayout: CommentFragmentVLayout
+    private lateinit var bVideo: BVideo
+    private lateinit var commentFragmentVLayout: CommentFragment
 
     @SuppressLint("InflateParams", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,20 +84,19 @@ class NormalVideoActivity : AppCompatActivity() {
                     finish()
                 }
             })
-        PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         review = LayoutInflater.from(this).inflate(
             R.layout.activity_normal_video, null
         )
-        setTheme(R.style.XUIPictureStyle)
+        //setTheme(R.style.XUIPictureStyle)
         setContentView(R.layout.activity_normal_video)
-        lesson = intent.serializable("lesson")!!
+        bVideo = intent.serializable("BVideo")!!
         initView()
         //增加封面
         val imageView = ImageView(this)
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        Glide.with(this).load(lesson.pic)
-            .placeholder(R.drawable.ic_gank)
-            .error(R.drawable.ic_error).into(imageView)
+        Glide.with(this).load(bVideo.pic)
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.loading).into(imageView)
 
         //imageView.setImageResource(R.mipmap.xxx1)
         resolveNormalVideoUI()
@@ -113,8 +122,11 @@ class NormalVideoActivity : AppCompatActivity() {
             .setShowFullAnimation(false)
             .setNeedLockFull(true)
             .setSeekRatio(1f)
+            .setSoundTouch(true)
+            .setThumbPlay(true)
+            .setUrl("")
             .setCacheWithPlay(false)
-            .setVideoTitle(lesson.title).setMapHeadData(hashMap)
+            .setVideoTitle(bVideo.title).setMapHeadData(hashMap)
             .setVideoAllCallBack(object : GSYSampleCallBack() {
                 override fun onStartPrepared(
                     url: String,
@@ -175,7 +187,6 @@ class NormalVideoActivity : AppCompatActivity() {
                     //开始播放了才能旋转和全屏
                     //orientationUtils!!.isEnable = detailPlayer!!.isRotateWithSystem
                     isPlay = true
-                    root!!.removeView(fab)
                 }
 
                 override fun onEnterFullscreen(
@@ -213,13 +224,13 @@ class NormalVideoActivity : AppCompatActivity() {
                 Debuger.printfLog(
                     " progress $progress secProgress $secProgress currentPosition $currentPosition duration $duration"
                 )
-            }
-        BiliRepo.getPlayUrl(lesson.bvid, lesson.cid, {
-            gsyVideoOption.setUrl(it.data?.durl?.get(0)?.url ?: "").build(detailPlayer)
+            }.build(detailPlayer)
+        BiliRepo.getPlayUrl(bVideo.bvid, bVideo.cid, {
+            //gsyVideoOption.setUrl(it.data?.durl?.get(0)?.url ?: "").build(detailPlayer)
+            detailPlayer?.setUp(it.data?.durl?.get(0)?.url ?: "", false, bVideo.title)
         })
-
-        detailPlayer!!.fullscreenButton
-            .setOnClickListener { //直接横屏
+        detailPlayer?.fullscreenButton
+            ?.setOnClickListener { //直接横屏
                 orientationUtils?.resolveByClick()
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
@@ -233,7 +244,6 @@ class NormalVideoActivity : AppCompatActivity() {
                     tb?.visibility = View.VISIBLE
                     videoTopBg?.visibility = View.VISIBLE
                 }
-
             }
 
             override fun hide() {
@@ -268,13 +278,21 @@ class NormalVideoActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (isPlay) {
-            curPlay!!.release()
-        }
+        curPlay?.release()
+        detailPlayer?.release()
         orientationUtils?.releaseListener()
     }
 
     private fun initView() {
+        ivBack = findViewById(R.id.iv_back_video)
+        ivHome = findViewById(R.id.iv_home_video)
+        ivBack?.setOnClickListener { finish() }
+        ivHome?.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+            finish()
+        }
         tb = findViewById(R.id.toolbar_video)
         detailPlayer = findViewById(R.id.detail_player)
         tl = findViewById(R.id.tl_video_scroll)
@@ -288,11 +306,6 @@ class NormalVideoActivity : AppCompatActivity() {
 //        toolBarLayout!!.setCollapsedTitleTextColor(Color.WHITE)
 //        toolBarLayout!!.setExpandedTitleColor(Color.TRANSPARENT)
 //        toolBarLayout!!.title = lesson.name
-        fab = findViewById(R.id.fab)
-        fab!!.setOnClickListener {
-            detailPlayer!!.startPlayLogic()
-            root!!.removeView(fab)
-        }
         appBar = findViewById(R.id.app_bar)
         val bvParams = detailPlayer!!.layoutParams
         val abParams = appBar!!.layoutParams
@@ -303,18 +316,71 @@ class NormalVideoActivity : AppCompatActivity() {
         detailPlayer!!.layoutParams = bvParams
         detailPlayer?.setPadding(0, Utils.getStatusBarHeight(), 0, 0)
         appBar!!.addOnOffsetChangedListener(appBarStateChangeListener)
+        initDanmaku()
     }
+
+    @SuppressLint("Recycle", "UseCompatLoadingForDrawables")
+    private fun initDanmaku() {
+        content = findViewById(R.id.content)
+        container = findViewById(R.id.container)
+        width= container?.layoutParams?.width!!
+        animator = ValueAnimator.ofInt(0, width)
+        animator?.addUpdateListener { animation ->
+            val value = animation.animatedValue as Int
+            container?.layoutParams!!.width = value
+            container?.requestLayout()
+        }
+        animator?.duration = 100
+        animator?.interpolator = AccelerateDecelerateInterpolator()
+        val box = findViewById<CheckBox>(R.id.cb_danmaku)
+        val fl = findViewById<FrameLayout>(R.id.fl_danmaku)
+//        val drawable = resources.getDrawable(R.drawable.bt_danmaku,null)
+//        drawable.setBounds(0,0,20,20)
+//        box.buttonDrawable = drawable
+        box.isChecked = false
+        box.setOnCheckedChangeListener { button, b ->
+            if (b){
+                collapse()
+                fl.background = resources.getDrawable(R.drawable.bg_danmaku_close,theme)
+            }else{
+                expand()
+                fl.background = resources.getDrawable(R.drawable.bg_danmaku_open,theme)
+            }
+        }
+    }
+    private fun expand() {
+        container?.visibility = View.VISIBLE
+        animator?.start()
+    }
+
+    private fun collapse() {
+        val reverseAnimator = ValueAnimator.ofInt(width, 0)
+        reverseAnimator.addUpdateListener { animation ->
+            val value = animation.animatedValue as Int
+            container!!.layoutParams.width = value
+            container!!.requestLayout()
+        }
+        reverseAnimator.duration = 100
+        reverseAnimator.interpolator = AccelerateDecelerateInterpolator()
+        reverseAnimator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                container!!.visibility = View.GONE
+            }
+        })
+        reverseAnimator.start()
+    }
+
 
     fun setAccount(account: Int) {
         adapter.setTitle("评论($account)")
     }
 
     private fun initContent() {
-        commentFragmentVLayout = CommentFragmentVLayout(
-            lesson.bvid
+        commentFragmentVLayout = CommentFragment(
+            bVideo.bvid
         )
         adapter = VideoPageAdapter(
-            this, supportFragmentManager, IntroFragment(lesson), commentFragmentVLayout
+            supportFragmentManager, IntroFragment(bVideo), commentFragmentVLayout
         )
 
         initVpAndTb()
@@ -340,8 +406,8 @@ class NormalVideoActivity : AppCompatActivity() {
 
     private fun resolveNormalVideoUI() {
         //增加title
-        detailPlayer!!.titleTextView.visibility = View.GONE
-        detailPlayer!!.backButton.visibility = View.GONE
+        //detailPlayer!!.titleTextView.visibility = View.GONE
+        //detailPlayer!!.backButton.visibility = View.GONE
     }
 
     private val curPlay: GSYVideoPlayer?
@@ -412,7 +478,8 @@ class NormalVideoActivity : AppCompatActivity() {
             AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED else layoutParams.scrollFlags =
             AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
         toolBarLayout!!.layoutParams = layoutParams
-        findViewById<ViewPager>(R.id.vp_video_scroll).isClickable = false
+
+        //findViewById<ViewPager>(R.id.vp_video_scroll).isClickable = false
 //        val l = ll_fuck.layoutParams as CoordinatorLayout.LayoutParams
 //        l.behavior = CoordinatorLayout
     }

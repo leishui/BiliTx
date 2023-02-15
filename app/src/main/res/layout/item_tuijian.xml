@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="?attr/app_fg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/ll_tj"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -18,7 +20,7 @@
             android:id="@+id/iv_tj"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/g"
+            android:src="@drawable/loading"
             android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
     <RelativeLayout
@@ -26,14 +28,13 @@
         android:layout_width="match_parent"
         android:layout_height="90dp">
         <TextView
+            android:textColor="?attr/app_text"
             android:id="@+id/tv_t_tj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="XX:XXXXXX"
             android:textSize="16sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:textColor="@color/black"/>
+            android:ellipsize="end" />
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -41,7 +42,7 @@
             android:src="@drawable/up_gray"/>
         <TextView
             android:id="@+id/tv_up_tj"
-            android:text="XXXXXXXXXXXX"
+            android:textColor="?attr/app_text"
             android:layout_marginStart="25dp"
             android:layout_above="@+id/ll_bottom_tj"
             android:layout_width="wrap_content"
@@ -59,9 +60,9 @@
                 android:layout_height="20dp"
                 android:src="@drawable/view_count_gray"/>
             <TextView
+                android:textColor="?attr/app_text"
                 android:id="@+id/tv_view_tj"
                 android:layout_marginStart="5dp"
-                android:text="226.7万"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"/>
             <ImageView
@@ -69,9 +70,9 @@
                 android:layout_height="20dp"
                 android:src="@drawable/danmaku_count_gray"/>
             <TextView
+                android:textColor="?attr/app_text"
                 android:id="@+id/tv_danmaku_tj"
                 android:layout_marginStart="5dp"
-                android:text="226.7万"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -80,7 +81,7 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/gray_20"/>

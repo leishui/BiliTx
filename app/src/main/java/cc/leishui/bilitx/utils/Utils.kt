@@ -10,13 +10,16 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import cc.leishui.bilitx.R
 import cc.leishui.bilitx.utils.ContextTool.Companion.context
+import com.bumptech.glide.Glide
 import com.luck.picture.lib.PictureSelectionModel
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
@@ -33,6 +36,29 @@ import java.util.*
 
 @SuppressLint("StaticFieldLeak")
 object Utils {
+
+    fun Context.getThemeColor(id:Int):Int{
+        val typedValue = TypedValue()
+        this.theme.resolveAttribute(id, typedValue, true)
+        return typedValue.data
+    }
+
+    fun tri(function: () -> Unit){
+        try {
+            function()
+        }catch (_:Exception){}
+    }
+    fun String.toast(){
+        Toast.makeText(ContextTool.getContext(), this, Toast.LENGTH_SHORT).show()
+    }
+    fun ImageView.load(url: String) {
+        Glide.with(context).load(url).error(R.drawable.loading).placeholder(R.drawable.loading)
+            .into(this)
+    }
+    fun ImageView.load(url: String,placeHolder:Int) {
+        Glide.with(context).load(url).error(placeHolder).placeholder(placeHolder)
+            .into(this)
+    }
 
     fun Int.std(): String {
         return if (this < 10000) {

@@ -1,11 +1,14 @@
-package cc.leishui.bilitx.adapter
+package cc.leishui.bilitx.adapter.video
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class VideoPageAdapter(private var context: Context, fm: FragmentManager, private val fragmentT: Fragment, private val fragmentF: Fragment) : FragmentPagerAdapter(
+class VideoPageAdapter(
+    fm: FragmentManager,
+    private val fragmentT: Fragment,
+    private val fragmentF: Fragment
+) : FragmentPagerAdapter(
     fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private var title = "评论"
     override fun getItem(position: Int): Fragment {

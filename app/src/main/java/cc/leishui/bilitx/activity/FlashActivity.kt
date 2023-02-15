@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import cc.leishui.bilitx.R
 import cc.leishui.bilitx.utils.SPUtils
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import kotlin.concurrent.thread
 
 
@@ -19,7 +21,7 @@ class FlashActivity : AppCompatActivity() {
     private fun init() {
         thread(start = true) {
             //Thread.sleep(2000)
-            //PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+            PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
             if (SPUtils.getServerUrl() == "")
                 SPUtils.saveServerUrl("https://yztx.leishui.cc/")
             if (!SPUtils.getIsPicker())

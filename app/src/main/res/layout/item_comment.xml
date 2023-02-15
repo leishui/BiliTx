@@ -4,18 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/app_fg"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="wrap_content">
         <com.rishabhharit.roundedimageview.RoundedImageView
             android:id="@+id/ri_avatar_comment"
             app:cornerRadius="50dp"
             app:roundedCorners="all"
             android:src="@drawable/g"
             android:scaleType="centerCrop"
+            android:padding="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"/>
         <TextView
@@ -23,30 +24,32 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:text="XXXXXX"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/pink"
+            android:gravity="bottom"
+            android:textColor="?attr/t_comment_uname"
             android:textStyle="bold"
             android:layout_toEndOf="@+id/ri_avatar_comment"/>
         <TextView
-            android:id="@+id/tv_up_time_intro"
+            android:id="@+id/tv_up_time_comment"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:text="7-29"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/pink"
+            android:gravity="top"
+            android:textColor="?attr/t_comment_udes"
             android:layout_toEndOf="@id/ri_avatar_comment"
             android:layout_below="@+id/tv_up_name_comment"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="70dp"
+        android:paddingStart="50dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
         android:orientation="vertical"
         tools:ignore="RtlSymmetry">
 
         <cc.leishui.bilitx.widget.OCTextView
             android:id="@+id/tv_comment_content"
-            android:textColor="@color/black"
+            android:textColor="?attr/t_comment_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -61,6 +64,7 @@
                 android:layout_height="@dimen/iv_reply_size"/>
             <TextView
                 android:id="@+id/tv_good_reply"
+                android:textColor="?attr/t_comment_udes"
                 android:layout_width="wrap_content"
                 android:gravity="center_vertical"
                 android:layout_height="@dimen/iv_reply_size"/>
@@ -85,17 +89,18 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="@color/gray"
+            android:background="?attr/app_fg_q"
             android:id="@+id/ll_comment_reply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="vertical">
 
         </LinearLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/gray_20"/>
 
 </LinearLayout>

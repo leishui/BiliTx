@@ -8,9 +8,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import cc.leishui.bilitx.R
 import cc.leishui.bilitx.constant.MainConstValue
-import cc.leishui.bilitx.fragment.CommunityFragmentVLayout
-import cc.leishui.bilitx.fragment.LessonFragmentVLayout
-import cc.leishui.bilitx.fragment.MainFragmentVLayout
+import cc.leishui.bilitx.fragment.CommunityFragment
+import cc.leishui.bilitx.fragment.LessonFragment
+import cc.leishui.bilitx.fragment.MainFragment
 import cc.leishui.bilitx.fragment.MineFragment
 import com.jpeng.jptabbar.JPTabBar
 import com.jpeng.jptabbar.anno.NorIcons
@@ -67,11 +67,11 @@ class MainActivity : AppCompatActivity(), MainConstValue {
     private fun initViewPager() {
         //往fragmentList里添加各个Fragment，下方顺序不能乱
         //添加主Fragment
-        fragmentList.add(MainFragmentVLayout())
+        fragmentList.add(MainFragment())
         //添加课程Fragment
-        fragmentList.add(LessonFragmentVLayout())
+        fragmentList.add(LessonFragment())
         //添加社区Fragment
-        fragmentList.add(CommunityFragmentVLayout())
+        fragmentList.add(CommunityFragment())
         //添加我的Fragment
         fragmentList.add(MineFragment())
         viewPager.adapter = object : FragmentPagerAdapter(

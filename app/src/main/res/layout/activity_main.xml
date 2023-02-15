@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity"
-    android:background="#ccc">
+    android:background="?attr/app_bg">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_main"
@@ -17,7 +17,7 @@
         android:id="@+id/tb_layout_main"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="#F9F9F9"
+        android:background="?attr/app_fg"
         android:layout_alignParentBottom="true"
         app:tab_animate="Scale"
         app:tab_middleView="@layout/layout_middle_tab" />

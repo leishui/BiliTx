@@ -2,6 +2,7 @@ package cc.leishui.bilitx.network.bili
 
 import cc.leishui.bilitx.bean.biliBean.*
 import cc.leishui.bilitx.utils.Utils
+import cc.leishui.bilitx.utils.Utils.tri
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -108,7 +109,8 @@ object BiliRepo {
                                 r.getJSONObject("owner").getString("name"),
                                 r.getJSONObject("owner").getString("face"),
                                 r.getJSONObject("stat").getInt("view"),
-                                r.getJSONObject("stat").getInt("danmaku")
+                                r.getJSONObject("stat").getInt("danmaku"),
+                                r.getInt("cid")
                             )
                         )
                     }
@@ -141,18 +143,17 @@ object BiliRepo {
                         val jo = JSONObject(json)
                         if (jo.getInt("code") == 0) {
                             val data = jo.getJSONObject("data")
-                            val rls = data.getJSONArray("replies")
+                            var rls = JSONArray()
+                            tri { rls = data.getJSONArray("replies") }
                             val count = rls.length()
                             val array = ArrayList<Reply>()
-                            try {
+                            tri {
                                 val topReplies = data.getJSONArray("top_replies")
-                                if (idx == 0)
-                                    for (i in 0 until topReplies.length()) {
-                                        val jsonObject = topReplies.getJSONObject(i)
-                                        addToReplyList(array, jsonObject)
-                                        replies.hasTop = true
-                                    }
-                            } catch (_: java.lang.Exception) {
+                                if (idx == 0) {
+                                    parseReplies(topReplies, array)
+                                    replies.hasTop = true
+                                }
+
                             }
                             replies.count = count
                             replies.acount = data.getJSONObject("page").getInt("acount")
@@ -216,27 +217,26 @@ object BiliRepo {
                 member.getLong("mid"),
                 member.getInt("is_senior_member"),
                 rcount = jsonObject.getInt("rcount"),
-                mr = list
+                mr = ArrayList(list)
             ).apply {
-                try {
+                tri {
                     this.entryTxt = jsonObject.getJSONObject("reply_control")
                         .getString("sub_reply_entry_text")
                     this.titleTxt = jsonObject.getJSONObject("reply_control")
                         .getString("sub_reply_title_text")
-                } catch (_: Exception) {
                 }
-                try {
+                tri {
                     val hm = HashMap<String, String>()
                     val sm = HashMap<String, Int>()
                     list.forEach {
                         hm[it.value] =
                             content.getJSONObject("emote").getJSONObject(it.value).getString("url")
                         sm[it.value] =
-                            content.getJSONObject("emote").getJSONObject(it.value).getJSONObject("meta").getInt("size")
+                            content.getJSONObject("emote").getJSONObject(it.value)
+                                .getJSONObject("meta").getInt("size")
                     }
                     this.urlMap = hm
                     this.sizeMap = sm
-                } catch (_: Exception) {
                 }
             }
         )

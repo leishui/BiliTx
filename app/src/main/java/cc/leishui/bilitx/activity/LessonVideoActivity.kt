@@ -17,7 +17,7 @@ import cc.leishui.bilitx.adapter.LessonPageAdapter
 import cc.leishui.bilitx.bean.bean.LessonSet
 import cc.leishui.bilitx.constant.ResourceType
 import cc.leishui.bilitx.constant.StatusType
-import cc.leishui.bilitx.fragment.video.CommentFragmentVLayout
+import cc.leishui.bilitx.fragment.video.CommentFragment
 import cc.leishui.bilitx.network.Repo
 import cc.leishui.bilitx.utils.SPUtils
 import cc.leishui.bilitx.utils.Utils
@@ -57,7 +57,7 @@ class LessonVideoActivity : AppCompatActivity() {
     private var isComment = false
     private var popupWindow: PopupWindow? = null
     private var popComment: PopupWindow? = null
-    private lateinit var commentFragmentVLayout: CommentFragmentVLayout
+    private lateinit var commentFragmentVLayout: CommentFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         review = LayoutInflater.from(this).inflate(
@@ -266,7 +266,7 @@ class LessonVideoActivity : AppCompatActivity() {
     }
 
     private fun initContent() {
-        commentFragmentVLayout = CommentFragmentVLayout(
+        commentFragmentVLayout = CommentFragment(
             "lessonSet.lessons[0].lessonId"
         )
 //        adapter = LessonPageAdapter(

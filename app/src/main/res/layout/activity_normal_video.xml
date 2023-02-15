@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/app_fg"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -21,7 +22,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:title=""
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="?attr/app_fg_q"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar_video">
             <FrameLayout
@@ -48,36 +49,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:title="a"
+                app:title=" "
                 app:popupTheme="@style/AppTheme.PopupOverlay">
                 <ImageView
-                    android:id="@+id/imageview"
+                    android:id="@+id/iv_back_video"
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="?attr/actionBarSize"
-                    android:padding="20dp"
+                    android:padding="15dp"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.7"
                     android:fitsSystemWindows="true"
-                    android:src="@drawable/video_back"/>
+                    android:src="@drawable/back"/>
+                <ImageView
+                    android:id="@+id/iv_home_video"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:padding="15dp"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7"
+                    android:fitsSystemWindows="true"
+                    android:src="@drawable/return_home"/>
+                <ImageView
+                    android:id="@+id/iv_more_video"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:padding="15dp"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="end"
+                    android:src="@drawable/more"/>
+                <ImageView
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:padding="15dp"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="end"
+                    android:src="@drawable/to_tv"/>
+                <ImageView
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:padding="15dp"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ting"/>
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_scrolling" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_media_play"
-        app:backgroundTint="@color/pink"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
